@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Virtuale dei Miscugli v3.0 - Completo</title>
+    
+    <!-- INIZIO CODICE CSS INTEGRATO -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #eef1f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1a4a7e;
+            margin-bottom: 10px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .selection-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 25px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .selector {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background-color: #fff;
+        }
+
+        .plus-symbol {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a4a7e;
+        }
+
+        button {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        #resultArea {
+            margin-top: 30px;
+            text-align: left;
+            opacity: 1;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .result-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            display: none;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .result-grid div {
+            padding: 10px;
+        }
+
+        .result-grid p {
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .animation-title {
+            text-align: center;
+            margin-top: 30px;
+            color: #1a4a7e;
+        }
+
+        #animationContainer {
+            width: 100%;
+            min-height: 250px;
+            background-color: #fdfdfd;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-top: 10px;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+    <!-- FINE CODICE CSS INTEGRATO -->
+</head>
+<body>
+
+    <div class="container">
+        <h1>Laboratorio Virtuale: Classificazione e Separazione dei Miscugli</h1>
+        <p>Scegli due sostanze, osserva che tipo di miscuglio formano e guarda un'animazione del metodo di separazione.</p>
+
+        <div class="selection-area">
+            <div class="selector">
+                <label for="sostanza1">Componente 1:</label>
+                <select id="sostanza1">
+                    <option value="acqua">Acqua (liquido)</option>
+                    <option value="sabbia">Sabbia (solido)</option>
+                    <option value="olio">Olio (liquido)</option>
+                    <option value="aria">Aria (gas)</option>
+                    <option value="polvere_ferro">Polvere di Ferro (solido)</option>
+                    <option value="fumo">Fumo (particelle solide in gas)</option>
+                    <option value="sale">Sale (solido)</option>
+                    <option value="alcol">Alcol Etilico (liquido)</option>
+                </select>
+            </div>
+            
+            <span class="plus-symbol">+</span>
+
+            <div class="selector">
+                <label for="sostanza2">Componente 2:</label>
+                <select id="sostanza2">
+                    <option value="sabbia">Sabbia (solido)</option>
+                    <option value="acqua">Acqua (liquido)</option>
+                    <option value="olio">Olio (liquido)</option>
+                    <option value="aria">Aria (gas)</option>
+                    <option value="polvere_ferro">Polvere di Ferro (solido)</option>
+                    <option value="fumo">Fumo (particelle solide in gas)</option>
+                    <option value="sale">Sale (solido)</option>
+                    <option value="alcol">Alcol Etilico (liquido)</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="mixButton">Crea e Analizza il Miscuglio</button>
+
+        <div id="resultArea" class="result-hidden">
+            <h2>Analisi del Miscuglio</h2>
+            <div class="result-grid">
+                <div>
+                    <strong>Tipo di Miscuglio:</strong>
+                    <p id="mixtureType"></p>
+                </div>
+                <div>
+                    <strong>Definizione:</strong>
+                    <p id="mixtureDescription"></p>
+                </div>
+                <div>
+                    <strong>Metodo di Separazione:</strong>
+                    <p id="separationMethod"></p>
+                </div>
+                 <div>
+                    <strong>Principio Sfruttato:</strong>
+                    <p id="separationPrinciple"></p>
+                </div>
+            </div>
+
+            <h3 class="animation-title">Schema Animato del Processo</h3>
+            <div id="animationContainer">
+                <!-- L'animazione SVG verrà generata qui dal JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- INIZIO CODICE JAVASCRIPT INTEGRATO -->
+    <script>
+        document.getElementById('mixButton').addEventListener('click', function() {
+            const sostanza1 = document.getElementById('sostanza1').value;
+            const sostanza2 = document.getElementById('sostanza2').value;
+            
+            if (sostanza1 === sostanza2) {
+                alert("Per favore, scegli due sostanze diverse.");
+                return;
+            }
+
+            const mixtureKey = [sostanza1, sostanza2].sort().join('+');
+            const result = getMixtureInfo(mixtureKey);
+
+            displayResults(result);
+            createAnimation(result.animation);
+        });
+
+        function getMixtureInfo(key) {
+            const mixtureData = {
+                // Miscugli con ACQUA
+                'acqua+alcol': { type: "Soluzione (Miscuglio Omogeneo)", desc: "Due liquidi completamente miscibili. Non sono distinguibili.", method: "Distillazione Frazionata", principle: "Sfrutta la leggera differenza nei punti di ebollizione (Alcol ~78°C, Acqua 100°C).", animation: "distillazione" },
+                'acqua+aria': { type: "Soluzione Gas-Liquido / Miscuglio Eterogeneo", desc: "L'aria si scioglie parzialmente in acqua (soluzione), ma può anche formare bolle (eterogeneo).", method: "Degassamento per riscaldamento", principle: "La solubilità dei gas in acqua diminuisce all'aumentare della temperatura.", animation: "degassamento" },
+                'acqua+fumo': { type: "Sospensione Solido-Liquido", desc: "Le particelle solide del fumo (fuliggine) sono disperse in acqua, rendendola torbida.", method: "Filtrazione", principle: "Il filtro trattiene le particelle solide e lascia passare l'acqua.", animation: "filtrazione" },
+                'acqua+olio': { type: "Emulsione", desc: "Miscuglio eterogeneo di due liquidi non miscibili. L'olio è meno denso e galleggia.", method: "Decantazione (con imbuto separatore)", principle: "Sfrutta la diversa densità e la non miscibilità.", animation: "decantazione" },
+                'acqua+polvere_ferro': { type: "Sospensione", desc: "La polvere di ferro, un solido, non si scioglie in acqua e tende a sedimentare.", method: "Filtrazione o Separazione Magnetica", principle: "La filtrazione usa la dimensione, la separazione magnetica sfrutta le proprietà magnetiche del ferro.", animation: "magnetica" },
+                'acqua+sabbia': { type: "Sospensione", desc: "Un solido non solubile in un liquido. La sabbia si deposita sul fondo.", method: "Decantazione e/o Filtrazione", principle: "Sfrutta la diversa densità (decantazione) o la diversa dimensione delle particelle (filtrazione).", animation: "filtrazione" },
+                'acqua+sale': { type: "Soluzione (Miscuglio Omogeneo)", desc: "Il sale (soluto) si scioglie completamente in acqua (solvente).", method: "Evaporazione del solvente / Distillazione", principle: "Sfrutta la differenza di volatilità. L'acqua evapora/bolle, lasciando il sale come residuo solido.", animation: "distillazione" },
+
+                // Miscugli con SABBIA
+                'alcol+sabbia': { type: "Sospensione", desc: "La sabbia non si scioglie nell'alcol.", method: "Filtrazione", principle: "Il filtro trattiene la sabbia e lascia passare l'alcol.", animation: "filtrazione" },
+                'aria+sabbia': { type: "Sospensione Solido-Gas", desc: "Particelle di sabbia sospese in aria (es. tempesta di sabbia).", method: "Sedimentazione o Filtrazione dell'aria", principle: "Sfrutta la forza di gravità (sedimentazione) o un filtro per bloccare il solido.", animation: "filtrazione_gas" },
+                'fumo+sabbia': { type: "Miscuglio complesso (Solido + Aerosol)", desc: "Un solido (sabbia) mescolato con un aerosol (fumo).", method: "Filtrazione dell'aria", principle: "Si può separare la fase gassosa con le particelle di fumo dalla sabbia.", animation: "filtrazione_gas" },
+                'olio+sabbia': { type: "Sospensione", desc: "La sabbia, solida, dispersa in un liquido viscoso come l'olio.", method: "Filtrazione", principle: "Anche se più lento a causa della viscosità, il principio della filtrazione è valido.", animation: "filtrazione" },
+                'polvere_ferro+sabbia': { type: "Miscuglio Solido-Solido", desc: "Due solidi, di cui uno ferromagnetico.", method: "Separazione Magnetica", principle: "Un magnete attira la polvere di ferro ma non la sabbia.", animation: "magnetica" },
+                'sabbia+sale': { type: "Miscuglio Solido-Solido", desc: "Due solidi con diversa solubilità in acqua.", method: "Estrazione con Solvente (acqua) + Filtrazione", principle: "Si aggiunge acqua per sciogliere il sale, si filtra via la sabbia e si fa evaporare l'acqua per recuperare il sale.", animation: "estrazione_solvente" },
+
+                // Miscugli con OLIO
+                'alcol+olio': { type: "Soluzione o Emulsione (dipende dalle proporzioni)", desc: "L'alcol e l'olio sono parzialmente miscibili. Possono formare una soluzione o separarsi in strati.", method: "Distillazione Frazionata", principle: "Sfrutta i diversi punti di ebollizione per separarli.", animation: "distillazione" },
+                'aria+olio': { type: "Schiuma / Sospensione Gas-Liquido", desc: "Bolle d'aria intrappolate nell'olio.", method: "Degassamento / Decantazione", principle: "Le bolle d'aria, meno dense, tendono a salire e a separarsi.", animation: "degassamento" },
+                'fumo+olio': { type: "Sospensione", desc: "Particelle di fuliggine disperse in olio.", method: "Filtrazione", principle: "Un filtro a maglie fini può trattenere le particelle solide.", animation: "filtrazione" },
+                'olio+polvere_ferro': { type: "Sospensione", desc: "Particelle magnetiche in un liquido viscoso.", method: "Separazione Magnetica", principle: "Un magnete potente può attrarre il ferro attraverso l'olio.", animation: "magnetica" },
+                'olio+sale': { type: "Sospensione", desc: "Il sale non si scioglie in olio e si comporta come un solido.", method: "Filtrazione", principle: "Il filtro trattiene i cristalli di sale e lascia passare l'olio.", animation: "filtrazione" },
+
+                // Miscugli con ARIA
+                'aria+fumo': { type: "Aerosol (tipo Fumo)", desc: "Particelle solide finissime disperse in un gas (aria).", method: "Filtrazione", principle: "Un filtro (es. maschera, filtro industriale) intrappola le particelle solide.", animation: "filtrazione_gas" },
+                'alcol+aria': { type: "Soluzione Gas-Liquido / Vapore", desc: "L'alcol è volatile, quindi le sue molecole evaporano e si mescolano con l'aria in modo omogeneo.", method: "Condensazione", principle: "Raffreddando la miscela, l'alcol vapore torna allo stato liquido, separandosi dall'aria.", animation: "distillazione"},
+                'aria+polvere_ferro': { type: "Aerosol / Sospensione", desc: "Polvere di ferro sospesa in aria.", method: "Filtrazione o Separazione Magnetica", principle: "Un filtro blocca la polvere, oppure un elettromagnete può attrarla.", animation: "filtrazione_gas" },
+                'aria+sale': { type: "Aerosol", desc: "Cristalli di sale finissimi dispersi in aria (es. aerosol marino).", method: "Filtrazione", principle: "Un filtro cattura le particelle saline.", animation: "filtrazione_gas" },
+
+                // Miscugli con POLVERE DI FERRO
+                'alcol+polvere_ferro': { type: "Sospensione", desc: "Polvere di ferro dispersa in alcol.", method: "Filtrazione o Separazione Magnetica", principle: "Si sfrutta la dimensione (filtro) o le proprietà magnetiche (magnete).", animation: "magnetica" },
+                'fumo+polvere_ferro': { type: "Miscuglio complesso", desc: "Un solido (ferro) mescolato a un aerosol (fumo).", method: "Separazione Magnetica", principle: "Il magnete separa la polvere di ferro dal fumo.", animation: "magnetica" },
+                'polvere_ferro+sale': { type: "Miscuglio Solido-Solido", desc: "Due solidi con proprietà diverse.", method: "Separazione Magnetica (più semplice)", principle: "Il magnete attira il ferro, lasciando il sale.", animation: "magnetica" },
+
+                // Miscugli con FUMO
+                'alcol+fumo': { type: "Sospensione", desc: "Particelle di fuliggine disperse in alcol.", method: "Filtrazione", principle: "Un filtro trattiene le particelle solide.", animation: "filtrazione" },
+                'fumo+sale': { type: "Miscuglio complesso", desc: "Un solido (sale) mescolato a un aerosol (fumo).", method: "Filtrazione dell'aria", principle: "Il fumo può essere filtrato via, lasciando il sale.", animation: "filtrazione_gas" },
+
+                // Miscugli con SALE
+                'alcol+sale': { type: "Soluzione (Miscuglio Omogeneo)", desc: "Il sale si scioglie (anche se meno che in acqua) nell'alcol.", method: "Evaporazione del solvente / Distillazione", principle: "L'alcol, più volatile, evapora lasciando il sale.", animation: "distillazione" },
+            };
+
+            return mixtureData[key] || { type: "Non definito", desc: "Questa combinazione non ha un esempio classico nel simulatore.", method: "N/A", principle: "", animation: "nessuna" };
+        }
+
+        function displayResults(result) {
+            const resultArea = document.getElementById('resultArea');
+            document.getElementById('mixtureType').textContent = result.type;
+            document.getElementById('mixtureDescription').textContent = result.desc;
+            document.getElementById('separationMethod').textContent = result.method;
+            document.getElementById('separationPrinciple').textContent = result.principle;
+            
+            resultArea.style.display = 'block';
+            setTimeout(() => resultArea.classList.remove('result-hidden'), 10);
+        }
+
+        function createAnimation(type) {
+            const container = document.getElementById('animationContainer');
+            container.innerHTML = '';
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 400 250');
+            container.appendChild(svg);
+
+            // Funzioni di aiuto SVG
+            const createText = (x, y, content, size = 12) => {
+                const text = document.createElementNS(svgNS, 'text');
+                text.setAttribute('x', x); text.setAttribute('y', y);
+                text.setAttribute('font-size', size); text.setAttribute('fill', '#333');
+                text.textContent = content; return text;
+            };
+            const createPath = (d, stroke, strokeWidth, fill) => {
+                const path = document.createElementNS(svgNS, 'path');
+                path.setAttribute('d', d); path.setAttribute('stroke', stroke);
+                path.setAttribute('stroke-width', strokeWidth); path.setAttribute('fill', fill);
+                return path;
+            };
+
+            switch (type) {
+                case 'filtrazione': {
+                    svg.appendChild(createText(50, 20, "Miscuglio (es. Acqua+Sabbia)"));
+                    svg.appendChild(createPath("M 50 30 L 50 200 H 150 V 30", "#333", 2, "rgba(0,150,255,0.2)"));
+                    for (let i = 0; i < 20; i++) svg.appendChild(createPath(`M ${60+Math.random()*80} ${180+Math.random()*20} a 3 3 0 0 1 0 0.1`, '#a5682a', 3));
+                    svg.appendChild(createText(250, 20, "Filtrazione"));
+                    svg.appendChild(createPath("M 250 150 L 250 220 H 350 V 150", "#333", 2, "none"));
+                    svg.appendChild(createPath("M 230 80 L 370 80 L 300 150 Z", "#333", 2, "#f0f0f0"));
+                    setTimeout(() => {
+                        svg.appendChild(createPath("M 251 151 L 251 219 H 349 V 151", "none", 0, "rgba(0,150,255,0.6)"));
+                        for (let i = 0; i < 20; i++) svg.appendChild(createPath(`M ${280+Math.random()*40} ${130+Math.random()*15} a 3 3 0 0 1 0 0.1`, '#a5682a', 3));
+                    }, 500);
+                    break;
+                }
+                case 'decantazione': {
+                    svg.appendChild(createText(150, 20, "Miscuglio (es. Acqua+Olio)"));
+                    const beaker = createPath("M 150 30 L 150 230 H 250 V 30", "#333", 2, "rgba(0,150,255,0.4)");
+                    const oil = createPath("M 150 30 H 250 V 130 H 150 Z", "none", 0, "rgba(255,223,0,0.6)");
+                    svg.appendChild(beaker); svg.appendChild(oil);
+                    setTimeout(() => {
+                        const g = document.createElementNS(svgNS, 'g');
+                        g.appendChild(beaker); g.appendChild(oil);
+                        svg.appendChild(g);
+                        g.style.transition = 'transform 1.5s ease-in-out';
+                        g.style.transform = 'rotate(-45deg) translate(-120px, 80px)';
+                        const newBeaker = createPath("M 280 150 L 280 230 H 360 V 150", "#333", 2, "rgba(255,223,0,0.6)");
+                        svg.appendChild(newBeaker);
+                        svg.appendChild(createText(10, 150, "Si versa via lo strato superiore"));
+                    }, 1000);
+                    break;
+                }
+                case 'magnetica': {
+                    svg.appendChild(createText(150, 20, "Miscuglio (es. Sabbia+Ferro)"));
+                    for (let i = 0; i < 40; i++) svg.appendChild(createPath(`M ${80+Math.random()*240} ${200+Math.random()*20} a 3 3 0 0 1 0 0.1`, '#a5682a', 3));
+                    const ironParticles = Array.from({length: 25}, () => {
+                        const p = createPath(`M ${80+Math.random()*240} ${200+Math.random()*20} a 3.5 3.5 0 0 1 0 0.1`, '#555', 4);
+                        svg.appendChild(p); return p;
+                    });
+                    const magnet = createText(180, 100, 'U (Magnete)', 30);
+                    magnet.setAttribute('fill', 'red'); svg.appendChild(magnet);
+                    setTimeout(() => {
+                        ironParticles.forEach(p => {
+                            p.style.transition = 'transform 1s ease-out';
+                            const currentPos = p.getAttribute('d').match(/M\s?(\d+\.?\d*)\s?(\d+\.?\d*)/);
+                            p.style.transform = `translate(${190-currentPos[1]}px, ${120-currentPos[2]}px)`;
+                        });
+                    }, 500);
+                    break;
+                }
+                case 'distillazione': {
+                    svg.appendChild(createText(10, 20, "1. Riscaldamento", 14));
+                    svg.appendChild(createPath("M 50 100 A 40 40 0 1 1 130 100 V 200 H 50 Z", "#333", 2, "rgba(0,150,255,0.3)")); // Flask
+                    svg.appendChild(createPath("M 90 100 V 50 H 150", "#333", 2, "none")); // Neck
+                    svg.appendChild(createPath("M 150 50 L 250 150", "#333", 2, "none")); // Condenser tube
+                    svg.appendChild(createPath("M 140 35 L 260 155 M 160 45 L 240 135", "#333", 3, "none")); // Condenser jacket
+                    svg.appendChild(createText(10, 220, "🔥 Calore", 18));
+                    svg.appendChild(createText(280, 100, "2. Raccolta", 14));
+                    svg.appendChild(createPath("M 270 170 L 270 230 H 350 V 170", "#333", 2, "none"));
+                     setTimeout(() => {
+                        svg.appendChild(createText(160, 100, "Vapore"));
+                        const drop = createPath("M 255 155 a 3 3 0 0 1 0 0.1", "blue", 5);
+                        svg.appendChild(drop);
+                        drop.style.transition = 'transform 1.5s linear';
+                        drop.style.transform = 'translateY(25px)';
+                        svg.appendChild(createPath("M 271 200 L 271 229 H 349 V 200", "none", 0, "rgba(0,150,255,0.5)")); // Distillato
+                    }, 1000);
+                    break;
+                }
+                case 'filtrazione_gas': {
+                    svg.appendChild(createText(20, 20, "Aria + Particelle (es. Fumo)"));
+                    for(let i=0; i<30; i++) svg.appendChild(createPath(`M ${20+Math.random()*100} ${50+Math.random()*150} a 2 2 0 0 1 0 0.1`, '#888', 2));
+                    svg.appendChild(createText(165, 120, "FILTRO", 14));
+                    svg.appendChild(createPath("M 200 30 V 220", "#333", 4));
+                    svg.appendChild(createText(250, 20, "Aria Pulita"));
+                    setTimeout(() => {
+                        const arrow = createText(130, 125, "-> -> ->", 20);
+                        svg.appendChild(arrow);
+                    }, 500);
+                    break;
+                }
+                case 'estrazione_solvente': {
+                     svg.appendChild(createText(10, 20, "1. Aggiungi Solvente (Acqua)"));
+                     svg.appendChild(createPath("M 10 30 H 130 V 200 H 10 Z", "#333", 2, "rgba(0,150,255,0.2)"));
+                     svg.appendChild(createText(20, 180, "Sabbia", 10));
+                     svg.appendChild(createText(20, 50, "Sale si scioglie", 10));
+                     svg.appendChild(createText(140, 120, "->", 20));
+                     svg.appendChild(createText(170, 20, "2. Filtra la sabbia"));
+                     svg.appendChild(createPath("M 170 80 L 250 80 L 210 140 Z", "#333", 2, "#f0f0f0"));
+                     svg.appendChild(createText(270, 120, "->", 20));
+                     svg.appendChild(createText(290, 20, "3. Evapora l'acqua"));
+                     svg.appendChild(createPath("M 290 150 H 390 V 200 H 290 Z", "#333", 2, "none"));
+                     svg.appendChild(createText(300, 180, "Sale recuperato", 10));
+                     svg.appendChild(createText(310, 100, "Acqua (vapore) ↑", 10));
+                     break;
+                }
+                case 'degassamento': {
+                    svg.appendChild(createText(120, 20, "Liquido con gas disciolto"));
+                    svg.appendChild(createPath("M 100 30 L 100 200 H 300 V 30", "#333", 2, "rgba(0,150,255,0.3)"));
+                    svg.appendChild(createText(170, 220, "🔥 Calore", 18));
+                    setTimeout(() => {
+                         for(let i=0; i<15; i++){
+                            const bubble = createPath(`M ${110+Math.random()*180} ${190} a 3 3 0 0 1 0 0.1`, "#fff", 2);
+                            svg.appendChild(bubble);
+                            bubble.style.transition = `transform ${1+Math.random()*2}s linear`;
+                            bubble.style.transform = 'translateY(-150px)';
+                         }
+                    }, 500);
+                    break;
+                }
+                default:
+                    svg.appendChild(createText(80, 120, "Nessuna animazione per questa combinazione."));
+            }
+        }
+    </script>
+    <!-- FINE CODICE JAVASCRIPT INTEGRATO -->
+
+</body>
+</html>
